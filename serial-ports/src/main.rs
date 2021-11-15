@@ -140,24 +140,3 @@ fn com_list_info() {
         }
     }
 }
-/*
-
-
-*/
-//fn com_write(port:&SerialPort>){
-//    let output = "This is a test. This is only a test.".as_bytes();
-//    port.write(output).expect("Write failed!");
-//}
-
-//fn com_read(port:&SerialPortType){
-//    let mut serial_buf: Vec<u8> = vec![0; 32];
-//port.read(serial_buf.as_mut_slice()).expect("Found no data!");
-//
-//}
-/*
-fn com_native(){
-    let port = serialport::new("/dev/ttyUSB0", 115_200)
-    .open_native().expect("Failed to open port");
-
-}
-*/
