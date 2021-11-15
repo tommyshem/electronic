@@ -1,0 +1,34 @@
+diff --git a/src/lib.rs b/src/lib.rs
+index c9500d1..1781678 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -519,6 +519,10 @@ pub struct UsbPortInfo {
+     pub manufacturer: Option<String>,
+     /// Product name (arbitrary string)
+     pub product: Option<String>,
++    /// Manufacturer from database (arbitrary string)
++    pub manufacturer_database: Option<String>,
++    /// Product name from database (arbitrary string)
++    pub product_database: Option<String>,
+ }
+ 
+ /// The physical type of a `SerialPort`
+diff --git a/src/posix/enumerate.rs b/src/posix/enumerate.rs
+index 6ae640a..e3b2f3f 100644
+--- a/src/posix/enumerate.rs
++++ b/src/posix/enumerate.rs
+@@ -71,10 +71,10 @@ fn port_type(d: &libudev::Device) -> Result<SerialPortType> {
+                 vid: udev_hex_property_as_u16(d, "ID_VENDOR_ID")?,
+                 pid: udev_hex_property_as_u16(d, "ID_MODEL_ID")?,
+                 serial_number,
+-                manufacturer: udev_property_as_string(d, "ID_VENDOR_FROM_DATABASE")
+-                    .or_else(|| udev_property_as_string(d, "ID_VENDOR")),
+-                product: udev_property_as_string(d, "ID_MODEL_FROM_DATABASE")
+-                    .or_else(|| udev_property_as_string(d, "ID_MODEL")),
++                manufacturer: udev_property_as_string(d, "ID_VENDOR"),
++                manufacturer_database: udev_property_as_string(d, "ID_VENDOR_FROM_DATABASE"),
++                product: udev_property_as_string(d, "ID_MODEL"),
++                product_database: udev_property_as_string(d, "ID_MODEL_FROM_DATABASE"),
+             }))
+         }
+         Some("pci") => Ok(SerialPortType::PciPort),
