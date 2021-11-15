@@ -1,8 +1,8 @@
 # create the packages folder and apply the patch
 package:
 	mkdir -p packages
-	cd packages;git clone https://gitlab.com/susurrus/serialport-rs.git
-	cd packages;git clone https://github.com/gregkh/usbutils.git
+	cd packages;git clone https://gitlab.com/susurrus/serialport-rs.git --depth=1
+	cd packages;git clone https://github.com/gregkh/usbutils.git --depth=1
 	cd packages/serialport-rs;git apply ../../bugfix.patch
 
 # remove the packages folder
