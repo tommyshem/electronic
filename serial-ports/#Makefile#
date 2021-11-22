@@ -1,0 +1,5 @@
+packages:
+	mkdir packages
+	cd packages;git clone https://gitlab.com/susurrus/serialport-rs.git
+	cd packages;git clone https://github.com/gregkh/usbutils.git
+	cd packages;git apply ../bugfix.patch
