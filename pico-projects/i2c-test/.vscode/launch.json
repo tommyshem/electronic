@@ -5,13 +5,16 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Cortex Debug",
+      "name": "Pico Debug",
+      "searchDir": [
+        "/home/tommy/electronics/pico/openocd/tcl"
+       ],
       "cwd": "${workspaceRoot}",
       "executable": "${command:cmake.launchTargetPath}",
       "request": "launch",
       "type": "cortex-debug",
       "servertype": "openocd",
-      "gdbPath": "gdb-multiarch",
+      "gdbPath": "arm-none-eabi-gdb",
       "device": "RP2040",
       "configFiles": [
         "interface/picoprobe.cfg",
