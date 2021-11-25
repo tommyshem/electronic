@@ -1,3 +1,5 @@
 serial-ports/Cargo.lock
 target/
 packages/
+**/.cortex-debug.peripherals.state.json
+**/.cortex-debug.registers.state.json
