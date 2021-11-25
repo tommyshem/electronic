@@ -23,3 +23,5 @@ help:
 	@echo"clean   = remove build folder"
 	@echo"gdb     = run arm gdb"
 	@echo"openocd = run openocd for picoprobe debuging"
+	@echo"For debugging run openocd in 1 terminal and then run gdb in the other terminal"
+	
