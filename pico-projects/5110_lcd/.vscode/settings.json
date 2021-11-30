@@ -12,15 +12,5 @@
     "buildTarget" : {
       "visibility": "hidden"
                },
-               "cmake.buildBeforeRun": true,
-               "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
-    },
-    "files.associations": {
-      "stdlib.h": "c",
-      "gpio.h": "c"
-    },
-    "lldb.displayFormat": "auto",
-    "lldb.showDisassembly": "always",
-    "lldb.dereferencePointers": true,
- 
+     },
 }
