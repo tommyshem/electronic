@@ -12,8 +12,10 @@ int main()
     bi_decl(bi_1pin_with_name(PICO_DEFAULT_SPI_CSN_PIN, "SPI CS"));
     
     // main loop
-    do
+    while (1)
     {
-        // todo
-    } while (1);
+        // todo 
+        
+    }
+    
 }
