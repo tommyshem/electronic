@@ -75,10 +75,10 @@ D/C  B7 B6 B5 B4 B3 B2 B1 B0
 *********************************************************************/
 // pins on rp2040 (Pico) to be used
 #define SPI_PORT spi0 // spi to use on rp2040
-#define PIN_MISO 16   // spi out
-#define PIN_CS 17     // chip select pin - set to 0 if wiring to 0v
-#define PIN_SCK 18    // spi clock
-#define PIN_MOSI 19   // spi in
+#define PIN_MISO PICO_DEFAULT_SPI_RX_PIN  // gpio 16 spi out
+#define PIN_CS PICO_DEFAULT_SPI_CSN_PIN    // gpio 17 chip select pin - set to 0 if wiring to 0v
+#define PIN_SCK  PICO_DEFAULT_SPI_SCK_PIN   // gpio 18 spi clock
+#define PIN_MOSI PICO_DEFAULT_SPI_TX_PIN  //gpio 19   spi in
 #define PIN_RST 20    // reset pin - set to 0 if wiring to 0v
 #define PIN_DC 21     // data command pin
 //LCD colors
@@ -87,21 +87,24 @@ D/C  B7 B6 B5 B4 B3 B2 B1 B0
 //setup LCD screen size
 #define LCDWIDTH 84
 #define LCDHEIGHT 48
+
 // function set commands
-#define FUNCTIONSET 32
+#define COMMAND_FUNCTION_SET 32
 #define FUNCTION_SET_POWERDOWN 4
 #define FUNCTION_SET_VERTICAL_MODE 2 // horz addressing vertical addressing
 #define FUNCTION_SET_EXTENDED_INSTRUCTION 1
+
 // display control only one of the flags can be used at a time
-#define DISPLAY_CONTROL 8
+#define COMMAND_DISPLAY_CONTROL 8
 #define DISPLAY_BLANK 0
 #define DISPLAY_NORMAL 4
 #define DISPLAY_ALL_ON 1
 #define DISPLAY_INVERTED 5
+
 // set y address
-#define SET_Y_ADDRESS 64
+#define COMMAND_SET_Y_ADDRESS 64
 // set x address
-#define SET_X_ADDRESS 128
+#define COMMAND_SET_X_ADDRESS 128
 // temperature control only use one of the flags at a time
 #define SET_TEMP 4
 #define TEMP_VLCD_0 0
@@ -118,6 +121,7 @@ D/C  B7 B6 B5 B4 B3 B2 B1 B0
 
 // if PIN_CS is set to 0 then do not include this code and the lcd module needs CS pin wiring to 0v
 #if PIN_CS > 0
+
 static inline void cs_select()
 {
     asm volatile("nop \n nop \n nop");
@@ -133,12 +137,42 @@ static inline void cs_deselect()
 }
 #endif
 
-// Setup The pins for the LCD display
-// param SCLK  Pin number for the Serial Clock on the LCD display
-// param DIN	Pin number for the data in on the LCD display
-// param DC	Pin number
-// param RST	Pin number Reset the data in on the LCD display
+/*
+ ****************************************************************
+                Internal functions used below
+ ****************************************************************
+*/
 
+// send command to the lcd module
+static void lcd_write_command(uint8_t c)
+{
+    gpio_put(PIN_DC, LOW);
+    cs_select();
+    spi_write_blocking(SPI_PORT, &c, 1);
+    cs_deselect();
+}
+
+// send command ram data to the lcd module
+static void lcd_write_command_data(uint8_t d)
+{
+    gpio_put(PIN_DC, HIGH);
+    cs_select();
+    spi_write_blocking(SPI_PORT, &d, 1);
+    cs_deselect();
+}
+
+/*
+ *******************************************************************
+               Public LCD functions below
+ *******************************************************************
+*/
+
+/*! Setup the rp2040 pins direction and setup the lcd module
+ \param SCLK  Pin number for the Serial Clock on the LCD display
+ \param DIN	Pin number for the data in on the LCD display
+ \param DC	Pin number
+ \param RST	Pin number Reset the data in on the LCD display
+*/
 void lcd_init()
 {
 
@@ -171,20 +205,6 @@ void lcd_init()
     // setup the lcd module
 }
 
-// send command to the lcd module
-static void lcd_command(uint8_t c)
-{
-    gpio_put(PIN_DC, LOW);
-    cs_select();
-    spi_write_blocking(SPI_PORT, &c, 1);
-    cs_deselect();
-}
+void lcd_clear(){
 
-// send command ram data to the lcd module
-static void lcd_command_data(uint8_t d)
-{
-    gpio_put(PIN_DC, HIGH);
-    cs_select();
-    spi_write_blocking(SPI_PORT, &d, 1);
-    cs_deselect();
 }
