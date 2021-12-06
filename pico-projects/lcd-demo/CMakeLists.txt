@@ -13,20 +13,18 @@ project(5110_lcd C CXX ASM)
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
-add_executable(5110_lcd src/main.c lcd-lib/lcd-lib.h lcd-lib/lcd-lib.c)
+add_executable(${PROJECT_NAME} src/main.c lcd-lib/lcd-lib.c lcd-lib/lcd-lib.h)
 
 # set name and version so pictool can read them
-pico_set_program_name(5110_lcd "5110_lcd")
-pico_set_program_version(5110_lcd "0.1")
+pico_set_program_name(${PROJECT_NAME} "5110_lcd")
+pico_set_program_version(${PROJECT_NAME} "0.1")
 
-# set which stdio we are using - 1 using 0 not using. Only one can be picked
-pico_enable_stdio_uart(5110_lcd 1)
-pico_enable_stdio_usb(5110_lcd 0)
+# set which stdio we are using for printf - 1 using 0 not using. Only one can be picked
+pico_enable_stdio_uart(${PROJECT_NAME} 1)
+pico_enable_stdio_usb(${PROJECT_NAME} 0)
 
 # Add the standard library to the build
-target_link_libraries(5110_lcd pico_stdlib)
+target_link_libraries(${PROJECT_NAME} pico_stdlib hardware_spi )
 
-# Add any user requested libraries
-target_link_libraries(5110_lcd hardware_spi )
-
-pico_add_extra_outputs(5110_lcd)
+# create map/bin/hex file etc.
+pico_add_extra_outputs(${PROJECT_NAME})

@@ -18,7 +18,7 @@ int main()
     {
         int c=1;
         // todo
-
+        printf("test");
     }
 
 }

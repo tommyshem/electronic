@@ -51,21 +51,19 @@ void lcd_init()
 #endif
    
 lcd_write_command(FUNCTION_SET_COMMAND+FUNCTION_SET_NORMAL);
-lcd_write_command(DISPLAY_CONTROL_COMMAND+DISPLAY_ALL_ON);
 lcd_write_command_data(255);
 
 
 }
-
-
+void fix(){
+    printf("needs fixing");
+}
 
 void lcd_clear_screen()
 {
+    fix();
 }
 
-void lcd_set_cursor(uint8_t x, uint8_t y)
-{
-}
 
 // draw directly to the lcd screen using column (x) row (y) coordinates and pixel_colour BLACK or WHITE
 void lcd_draw_pixel(uint8_t column, uint8_t row, uint8_t pixel_color)
@@ -73,18 +71,51 @@ void lcd_draw_pixel(uint8_t column, uint8_t row, uint8_t pixel_color)
     // check max coordinates and exit if to big
     if ((column < 0) || (column > LCDWIDTH) || (row < 0) || (row >= LCDHEIGHT))
         return;
-
+     uint8_t shift = row % 8; // get the reminder 
     // x is column or y is the row
-    if (pixel_color)
-    fix(); // todo update buffer with pixel
-    else
-    fix();  // todo update buffer with clear pixel
-    // todo display updated buffer
+    if (pixel_color) // If BLACK, set the bit.
+   // displayMap[column + (row/8)*LCDWIDTH] |= 1<<shift;
+   fix();
+    else // If WHITE clear the bit.
+    fix();
+    // displayMap[column + (row/8)*LCDWIDTH] &= ~(1<<shift);
+    
 }
 
-void fix(){
-    printf("needs fixing");
+/*
+set pixel in the memory map
+*/
+void setPixel(uint8_t column, uint8_t row)
+{
+  lcd_draw_pixel(column, row, BLACK); 
 }
+
+/*
+clear pixel in the memory map
+*/
+void clearPixel(uint8_t column, uint8_t row)
+{
+  lcd_draw_pixel(column, row, WHITE); 
+}
+
+void lcd_set_cursor(uint8_t column, uint8_t row)
+{
+  lcd_write_command(0x80 | column);  // Column.
+  lcd_write_command(0x40 | row);  // Row.  ?
+}
+
+// This will actually draw on the display, whatever is currently
+// in the displayMap array.
+void updateDisplay()
+{
+  lcd_set_cursor(0, 0);
+  for (int i=0; i < (LCDWIDTH * LCDHEIGHT / 8); i++)
+  {
+  fix();//  lcd_write_command_data(displayMap[i]);
+  }
+}
+
+
 
 //****************************************************************
 //               Internal functions used below
